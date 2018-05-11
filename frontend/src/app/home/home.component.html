@@ -1,0 +1,235 @@
+<div class="main">
+
+  <div id="container " style="height: inherit">
+    <nav class="main-nav">
+
+      <div class="nav-wrapper  teal darken-4">
+        <a href="#!user"><img class="circle" style="margin:-10px 5px; width:32px; height:32px" src={{profile_img}}></a>
+        <span class = "greeting-message">Hello {{username}}
+        </span>
+        <a href="#" data-activates="slide-out" class="button-collapse" style="display: block!important">
+          <i class="material-icons">menu</i>
+        </a>
+
+
+        <ul id="nav-mobile" class="right hide-on-med-and-down" style=" height: inherit;padding-right: 20px;">
+            <li> <a class="waves-effect waves-light modal-trigger" data-target="modal4">Change Password</a></li>
+            <li><a id = 'settings' class='dropdown-button waves-effect waves-light' (click)="Settings()" data-activates='dropdown1'>Settings</a></li>
+            <li id='logout' class="waves-effect waves-light" (click)="logout()" >Logout</li>
+        </ul>
+      </div>
+    </nav>
+
+
+    <ul id="slide-out" class="side-nav scroll1" style="width: 25%;">
+      <li><div class="user-view">
+        <div class="background">
+          <img src="">
+        </div>
+        <a href="#!user"><img class="circle" style="width:150px; height:150px" src={{profile_img}}></a>
+        <a href="#!name"><span class="white-text name">{{username}}</span></a>
+        <a href="#!email"><span class="white-text email">{{selectedEmail}}</span></a>
+        <a href="#!email"><span class="white-text email">{{status}}</span></a>
+      </div></li>
+      <li>
+        <div>
+          <form action="#">
+            <div class="file-field input-field">
+              <div class="btn">
+                <span>Upload profile pic</span>
+                <input name="profilepic" type="file" id="profile-pic-upload" (change) = "fileEvent($event)">
+              </div>
+              <br>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="Upload one or more files">
+              </div>
+            </div>
+          </form>
+        </div>
+      </li>
+
+    </ul>
+
+
+  <div class="row main-content">
+
+      <div class="col s3 no-padding scroll1" style="height: inherit;overflow-y: auto;">
+        <nav>
+          <div class="nav-wrapper black">
+              <ul id="nav-mobile" class="left hide-on-med-and-down">
+                <li> <a class="waves-effect waves-light modal-trigger" data-target="modal1">New Group</a></li>
+              </ul>
+              <ul id="nav-mobile" class="left hide-on-med-and-down">
+                <li> <a class="waves-effect waves-light modal-trigger" data-target="modal2">Update Status</a></li>
+              </ul>
+          </div>
+        </nav>
+
+        <ul id='dropdown1' class='dropdown-content'>
+            <li><a href="#!">Profile</a></li>
+        </ul>
+        <!-- modal for new group -->
+        <div id="modal1" class="modal">
+          <div class="modal-content">
+            <h4 id="groupText">Add Group Name</h4>
+            <input #newGroup
+              class="input" placeholder="Enter group name here.."
+              (keyup.enter)="addGroup(newGroup.value)">
+              <button id="newgroup" class="btn modal-close" (click)="addGroup(newGroup.value)">Create Group</button>
+          </div>
+       </div>
+
+         <div id="modal2" class="modal">
+          <div class="modal-content">
+            <h4>Update Status</h4>
+            <input #newStatus
+              class="input" placeholder="Enter new status here.."
+              [(ngModel)]="status"
+              (keyup.enter)="updateStatus(newStatus.value)">
+              <button id = "status3" class="btn modal-close" (click)="updateStatus(newStatus.value)">Update Status</button>
+          </div>
+       </div>
+
+         <div id="modal4" class="modal">
+            <div class="modal-content">
+              <h4>Enter your new password</h4>
+              <input #newpassword
+                class="input" type="password" placeholder="Enter new password.."
+                [(ngModel)]="password"
+                (keyup.enter)="changePassword(newpasword.value)">
+                <button id = "status4" class="btn modal-close" (click)="changePassword(newpassword.value)">Change Password</button>
+            </div>
+         </div>
+       <form>
+          <div>
+              <input type="text" placeholder="  Search contacts" id="search-box" name="search">
+          </div>
+        </form>
+        <ul class="user-list">
+
+        </ul>
+        <nav class="nav-extended">
+          <div class="nav-content">
+            <ul class="tabs tabs-transparent">
+              <button id = "online" class="waves-effect waves-light btn" (click)="selectedUsersList=true" style="width: 49%; height: 48px;">ONLINE</button>
+              <button id = "offline" class="waves-effect waves-light btn" (click)="selectedUsersList=false" style="width: 49%; height: 48px;">OFFLINE</button>
+            </ul>
+          </div>
+        </nav>
+
+        <div *ngIf="selectedUsersList">
+          <ul class="collection">
+            <li class="collection-item active avatar"
+              *ngFor="let user of chatListUsers |filter:term"
+              (click)="selectedUser(user)"
+              [class.selected-user]="isUserSelected(user._id)">
+                <img src={{user.img}} alt="" class="circle">
+
+                <span class="title">{{ user.username}}</span>
+                <p> <br></p>
+                <p><span class="title">{{ user.status}}</span></p>
+                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+            </li>
+            <li class="collection-item active avatar"
+              *ngFor="let group of groupsList |filter:term"
+              (click)="selectedGroup(group)"
+              [class.selected-group]="isGroupSelected(group.groupName)">
+              <img src="" alt="" class="circle">
+
+              <span class="title">{{ group.groupName}}</span>
+              <a class="waves-effect waves-light btn modal-trigger right" href="#modal3" (click)="populateNonMembers(group.groupName)">Add</a>
+              <a class="waves-effect waves-light btn modal-trigger right" href="#modal4" (click)="populateMembers(group.groupName)">Delete</a>
+
+
+            </li>
+          </ul>
+        </div>
+
+        <div id="modal3" class="modal">
+          <div class="modal-content">
+            <form action="#" id="mySelect">
+                <p *ngFor="let user of exsistingUsers; let i = index">
+                  <input type="checkbox" class="filled-in" id="test{{i}}" (click)="AddUser(user.username,user.userId)"/>
+                  <label for="test{{i}}">  {{ user.username}} </label>
+                </p>
+              </form>
+              <button class="btn modal-close" (click)="AddUsers()">Add users</button>
+          </div>
+        </div>
+
+        <div id="modal4" class="modal">
+          <div class="modal-content">
+            <form action="#" id="mySelect2">
+                <p *ngFor="let user of newUserstoGroup; let i = index">
+                  <input type="checkbox" class="filled-in" id="testdelete{{i}}" (click)="DeleteUser(user.username,user.userId)"/>
+                  <label for="testdelete{{i}}">  {{ user.username}} </label>
+                </p>
+              </form>
+              <button class="btn modal-close" (click)="DeleteUsers()">Delete users</button>
+          </div>
+        </div>
+
+        <div *ngIf="!selectedUsersList">
+          <ul class="collection">
+            <li class="collection-item active avatar"
+                *ngFor="let user of chatOfflineUsers |filter:term"
+                (click)="selectedUser(user)"
+                [class.selected-user]="isUserSelected(user._id)">
+
+                  <img src={{user.img}} alt="" class="circle">
+
+                  <span class="title">{{ user.username}}</span>
+                  <p>First Line <br> Second Line</p>
+
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col s9 no-padding scroll1" style="height: inherit;overflow-y: auto;">
+        <nav class="chat-title">
+          <div class="nav-wrapper black">
+            <div *ngIf="selectedUserName"
+              class="opposite-user">
+                Chatting with {{selectedUserName}}
+            </div>
+            <div *ngIf="selectedGroupName"
+            class="opposite-user">
+              Chatting in {{selectedGroupName}}
+            </div>
+          </div>
+        </nav>
+        <ul class="message-thread">
+
+          <li class="clearfix" *ngFor="let message of messages"
+            [ngStyle]="{
+              'display': inline-block,
+              'font-weight': 'bold',
+              'background-color': '#c51162 pink accent-4'
+            }"
+            [ngClass]="alignMessage(message.fromUserId)?'received': 'sent'">
+            <blockquote >
+                <div class="message-container" [innerHTML]="message.message">
+                </div>
+            </blockquote>
+
+          </li>
+        </ul>
+        <div class="page-footer chat-footer">
+          <div id="copyright">
+            <div class="">
+              <div class="input-field">
+                  <input placeholder="Enter your text here" id="icon_prefix" type="text" class="validate"
+                  [(ngModel)]="message"
+                  (keyup)="sendMessage($event)">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
