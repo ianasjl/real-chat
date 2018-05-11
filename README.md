@@ -16,3 +16,5 @@
 * Для запуска скриптов миграции БД:
 -   run 'node server-ext/symfony-api/routes usersfmtp.js' (from MongoDB to PostgreSQL)
 -   run 'node server-ext/symfony-api/routes usersfptm.js' (from PosthreSQL to MongoDB)
+
+![Image alt](https://github.com/ianasjl/real-chat/raw/master/messengerJuniorLab.png)
